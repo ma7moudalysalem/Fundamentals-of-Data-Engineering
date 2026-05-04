@@ -1,0 +1,132 @@
+%!TEX program = xelatex
+\documentclass[12pt, a4paper, openany]{book}
+
+\input{preamble.tex}
+
+\begin{document}
+
+%% ─── TITLE PAGE ─────────────────────────────────────────────
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[berkeleyblue]
+    (current page.south west) rectangle (current page.north east);
+
+  %% Top gold bar
+  \fill[californiagold]
+    ([yshift=-3.2cm]current page.north west) rectangle
+    ([yshift=-3.35cm]current page.north east);
+
+  %% Thin secondary line
+  \fill[californiagold, opacity=0.5]
+    ([yshift=-3.6cm]current page.north west) rectangle
+    ([yshift=-3.62cm]current page.north east);
+
+  %% Decorative giant text
+  \node[anchor=west, text=white, opacity=0.08,
+        font=\fontsize{180}{200}\selectfont\bfseries]
+    at ([xshift=0.6cm, yshift=-10cm]current page.north west)
+    {DE};
+
+  %% Top label
+  \node[anchor=west, text=californiagold!90, font=\small\sffamily]
+    at ([xshift=2.5cm, yshift=-4.6cm]current page.north west)
+    {LECTURE NOTES \textbullet{} VOLUME I};
+
+  %% Main title
+  \node[anchor=west, text=californiagold,
+        font=\fontsize{34}{40}\selectfont\bfseries,
+        text width=16cm]
+    at ([xshift=2.5cm, yshift=-7.0cm]current page.north west)
+    {Fundamentals of\\Data Engineering};
+
+  %% Subtitle
+  \node[anchor=west, text=white,
+        font=\fontsize{17}{22}\selectfont\itshape,
+        text width=16cm]
+    at ([xshift=2.5cm, yshift=-10.7cm]current page.north west)
+    {A study companion to the book};
+
+  %% Description line
+  \node[anchor=west, text=white!75,
+        font=\normalsize, text width=16cm]
+    at ([xshift=2.5cm, yshift=-11.7cm]current page.north west)
+    {by Joe Reis \& Matt Housley --- O'Reilly Media, 2022};
+
+  %% Decorative separator
+  \fill[californiagold, opacity=0.35]
+    ([yshift=-13.4cm, xshift=2.5cm]current page.north west) rectangle
+    ([yshift=-13.43cm, xshift=-2.5cm]current page.north east);
+
+  %% Author block
+  \node[anchor=west, text=californiagold!90, font=\small\sffamily]
+    at ([xshift=2.5cm, yshift=-14.4cm]current page.north west)
+    {AUTHORED BY};
+
+  \node[anchor=west, text=white,
+        font=\fontsize{20}{24}\selectfont\bfseries]
+    at ([xshift=2.5cm, yshift=-15.4cm]current page.north west)
+    {Mahmoud~Salem};
+
+  \node[anchor=west, text=white!75, font=\small,
+        text width=16cm]
+    at ([xshift=2.5cm, yshift=-16.3cm]current page.north west)
+    {\href{https://www.linkedin.com/in/mahmoudalysalem}{linkedin.com/in/mahmoudalysalem}};
+
+  %% Bottom gold bar
+  \fill[californiagold]
+    ([yshift=2cm]current page.south west) rectangle
+    ([yshift=2.15cm]current page.south east);
+
+  %% Thin secondary bottom line
+  \fill[californiagold, opacity=0.5]
+    ([yshift=1.75cm]current page.south west) rectangle
+    ([yshift=1.77cm]current page.south east);
+
+  %% Footer line
+  \node[anchor=south, text=white!55, font=\small\sffamily,
+        text width=18cm, align=center]
+    at ([yshift=2.55cm]current page.south)
+    {PREFACE \quad\textbullet\quad CHAPTER 1: DATA ENGINEERING DESCRIBED};
+\end{tikzpicture}
+\end{titlepage}
+
+%% ─── COLOPHON / ABOUT THESE NOTES ───────────────────────────
+\thispagestyle{empty}
+\vspace*{2cm}
+{\color{berkeleyblue}\Large\bfseries About these notes}\\
+{\color{californiagold}\rule{6cm}{1pt}}
+
+\vspace{1em}
+\noindent These are my personal study notes for \emph{Fundamentals of Data Engineering} by Joe Reis and Matt Housley (O'Reilly Media, 2022). I'm working through the book chapter by chapter and writing down what I want to remember in my own words: the ideas that struck me, the parts that took a second pass to click, and the connections I made to things I've read elsewhere.
+
+\vspace{1em}
+\noindent The notes are not a substitute for the book. They're more like a long conversation with myself about it — what the authors said, what I think about it, and the bits of context (papers, blog posts, war stories) I went looking for to fill in the gaps. If a passage here sparks something, the next stop should be the original chapter.
+
+\vspace{1em}
+\noindent The original figures from the book are reproduced for study purposes only. All credit for the content of \emph{Fundamentals of Data Engineering} belongs to its authors and publisher.
+
+\vspace{1em}
+\noindent
+\begin{tabular}{@{}ll}
+\textbf{Author of these notes:} & Mahmoud Salem \\
+\textbf{LinkedIn:} & \href{https://www.linkedin.com/in/mahmoudalysalem}{linkedin.com/in/mahmoudalysalem} \\
+\textbf{Source book:} & Reis \& Housley, \emph{Fundamentals of Data Engineering} \\
+                      & O'Reilly Media, 2022 (ISBN 978-1098108304) \\
+\textbf{Volume:} & I — Preface \& Chapter 1 \\
+\end{tabular}
+
+\clearpage
+
+%% ─── TOC ────────────────────────────────────────────────────
+\setcounter{tocdepth}{2}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+%% ─── CONTENT ────────────────────────────────────────────────
+\input{01_preface.tex}
+\input{02_chapter01.tex}
+
+\end{document}

@@ -1,0 +1,181 @@
+%% ─── PREFACE NOTES ──────────────────────────────────────────
+\chapter*{Preface — My reading notes}
+\addcontentsline{toc}{chapter}{Preface — My reading notes}
+\markboth{Preface}{}
+
+\epigraph{The big idea of this book is the data engineering lifecycle: data generation, storage, ingestion, transformation, and serving.}{Joe Reis \& Matt Housley}
+
+\section*{Why I picked up this book}
+\addcontentsline{toc}{section}{Why I picked up this book}
+
+I've been around data work long enough to notice a pattern: every few years, the tools change and the job titles get reshuffled, but the underlying problems stay roughly the same. Where does the data come from? How do we store it without it rotting? How do we move it somewhere useful without breaking it? And how do we serve it to the people who actually need it — analysts, scientists, ML engineers, business stakeholders — in a form they can trust?
+
+That's the territory \emph{Fundamentals of Data Engineering} stakes out. The authors, Joe Reis and Matt Housley, both run Ternary Data and host the \emph{Joe Reis Show} (formerly \emph{The Monday Morning Data Chat}). They're not academics writing from a distance. They've been in the trenches with clients across industries, and the book has the texture of people who've debugged things at 2~a.m. and lived to tell about it.
+
+The reason I wanted to write these notes — rather than just reading and underlining — is that the field moves fast enough that holding onto the timeless ideas matters more than the specific tools. Snowflake, Databricks, dbt, Airflow, Kafka — those are the brand names in 2026, but the \emph{shape} of the work hasn't changed since Inmon coined "data warehouse" in 1989. Reis and Housley argue this explicitly, and I want to internalize their framework so that the next time some shiny new tool shows up I can place it on the map instead of getting swept up in the marketing.
+
+\section*{The authors' starting position}
+\addcontentsline{toc}{section}{The authors' starting position}
+
+The opening of the preface caught my attention because it's surprisingly candid. Reis and Housley call themselves "recovering data scientists." Both of them came into the data world wanting to do machine learning and analytics, got assigned to data science projects, and then ran face-first into a wall: there was no plumbing. No reliable pipelines. No clean data. No reproducible environments. They couldn't actually do data science because the foundation under the data science wasn't there.
+
+So they shifted. They started building the infrastructure themselves, and over time realized that the foundation work was its own discipline — a hugely underappreciated one — and that there was a lot of rich, well-paid, intellectually serious work to be done in laying that foundation. That's the origin story of this book.
+
+\begin{quotebox}
+\textbf{What strikes me about this:} the authors aren't selling data engineering as the "lowly plumbing" beneath the glamorous data science work. They're saying the plumbing \emph{is} where the leverage is. If your data foundation is wrong, no amount of fancy modeling on top can save you. I've seen this myself in projects where teams kept tuning XGBoost hyperparameters when the real problem was that half their training data had a silently broken join.
+\end{quotebox}
+
+\section*{What the book is — and isn't}
+\addcontentsline{toc}{section}{What the book is — and isn't}
+
+Reis and Housley spend an explicit section telling you what the book \emph{isn't}, which I appreciate. It's not a tutorial on a specific tool. It won't teach you Spark or Airflow or BigQuery. There are good books for that, and the authors recommend treating their book as a complement to those — a kind of architectural map you read alongside the tool-specific docs.
+
+What it \emph{is} is a framework. The big organizing idea is the \term{data engineering lifecycle}, which has five stages and six undercurrents. The five stages are linear-ish — data flows through them — and the six undercurrents thread through every stage. I'll dig into this properly in Chapter~2, but here's the skeleton, just so I have it written down somewhere I can refer back to:
+
+\begin{defbox}
+\textbf{The five lifecycle stages}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Generation} — data is produced by a source system (an application database, an IoT device, a third-party API, a CSV upload).
+  \item \textbf{Storage} — somewhere has to hold the data, often in multiple places along the way.
+  \item \textbf{Ingestion} — moving data from a source into the systems where the engineering team has control over it.
+  \item \textbf{Transformation} — reshaping the data into a form useful for downstream consumers.
+  \item \textbf{Serving} — delivering the transformed data to analysts, data scientists, ML pipelines, dashboards, or reverse-ETL flows back into operational systems.
+\end{enumerate}
+
+\textbf{The six undercurrents}
+\begin{itemize}[leftmargin=*]
+  \item Security
+  \item Data management
+  \item DataOps
+  \item Data architecture
+  \item Orchestration
+  \item Software engineering
+\end{itemize}
+\end{defbox}
+
+What's powerful about this framing is its longevity. Specific technologies churn — MapReduce was the future once, then Spark replaced it, then we got Snowflake and BigQuery and the modern data stack — but the \emph{stages} the data passes through don't change. There has always been generation, there has always been storage, there has always been some kind of ingestion-transform-serve flow. Only the names and the boundaries between them shift. If I learn the stages well, I can place any new tool on the map and know what role it's playing.
+
+\section*{The cloud-first stance}
+\addcontentsline{toc}{section}{The cloud-first stance}
+
+The authors say they take a "cloud-first" approach without apologizing for it. That's a position worth pausing on, because it's not as obvious as it sounds.
+
+Their argument: cloud isn't just a hosting decision, it's a structural one. When infrastructure is ephemeral and elastic, the way you design data systems changes. You stop thinking about provisioning a 16-node Hadoop cluster as a six-month capital project and start thinking of compute as a knob you can turn. You lean toward managed services, because the alternative — running your own Kafka, your own Airflow, your own Postgres at scale — is more work than most teams should be doing.
+
+I think this is broadly right, but I want to flag a counter-current the book acknowledges briefly: there's been a noticeable backlash in 2023--2024 around cloud cost. \href{https://world.hey.com/dhh/why-we-re-leaving-the-cloud-654b47e0}{37signals' "Why we're leaving the cloud"} essay made the rounds, and the FinOps Foundation has grown into a real movement. The cloud is still the default, but the assumption that it's always cheaper has been quietly retired. I'll keep this in mind as I read the rest of the book — when the authors lean on managed services, there's an implicit cost trade-off that may not always pencil out for very high-throughput steady-state workloads.
+
+\begin{notebox}
+\textbf{For my own reading:} the cloud-first vs. on-prem debate isn't really a binary. Most large data orgs are running hybrid setups — a cloud warehouse for the analytics layer, on-prem clusters for steady-state ETL or for regulated data, and SaaS for ingestion. The interesting design question isn't "cloud or not?" but "where does each component live, and why?"
+\end{notebox}
+
+\section*{Who the book is for}
+\addcontentsline{toc}{section}{Who the book is for}
+
+The authors aim the book at three groups. The primary target is technical practitioners — software engineers, data scientists, or analysts who want to move into data engineering, plus existing data engineers who are deep in one tool but want a wider perspective. The secondary target is data leadership — team leads, directors, CTOs — who need a coherent picture of the field to make hiring and technology decisions.
+
+I fit somewhere in that mix. I read this book partly to firm up my own mental model and partly to be able to talk about the field with senior people without getting lost in tooling-specific jargon. If you're picking these notes up cold and you've never worked with data before, I'd suggest reading the book itself first — these notes assume the reader has at least bumped into terms like ETL, data warehouse, OLAP, and BI dashboard before, even if only in passing.
+
+\section*{Prerequisites the authors assume}
+\addcontentsline{toc}{section}{Prerequisites the authors assume}
+
+The book assumes:
+\begin{itemize}[leftmargin=*]
+  \item Familiarity with the kinds of data systems you'd find in a corporate environment (operational databases, warehouses, BI tools — the names will be familiar even if the details aren't).
+  \item Some working knowledge of \term{SQL} and \term{Python} (or another general-purpose language).
+  \item Some exposure to cloud services — AWS, Azure, GCP, Snowflake, Databricks. The authors recommend setting up free-tier accounts to play with the tools as you read.
+\end{itemize}
+
+These are the bare minimum. If you don't have them, the authors' suggestion is to read the book once for the high-level ideas and then revisit it after filling in the gaps. That's actually a defensible reading strategy for any technical book — the first pass is for the shape, the second pass is for the details.
+
+\section*{What I expect to get out of the book}
+\addcontentsline{toc}{section}{What I expect to get out of the book}
+
+The authors lay out their expectations explicitly, and I want to capture them as a benchmark to check myself against later. By the end, I should be able to:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Apply data engineering thinking in any data role I'm in.} Even if my title isn't "data engineer," the lifecycle framework is useful for an analyst trying to understand why their dashboards are flaky, or for a software engineer trying to design event schemas that will hold up downstream.
+  \item \textbf{Cut through the marketing.} The data tooling space is genuinely overwhelming — \href{https://mattturck.com/data2024/}{Matt Turck's annual MAD landscape} chart has crossed 2,000 logos. Having a framework for evaluating tools means I can read a vendor pitch and immediately know what stage of the lifecycle it claims to address and what I should be skeptical about.
+  \item \textbf{Design end-to-end architectures} that account for the full lifecycle rather than optimizing one stage at a time.
+  \item \textbf{Bake security and governance into the design from the start} rather than retrofitting them after a compliance scare.
+\end{itemize}
+
+That's the contract the book is making with me. We'll see how it pans out.
+
+\section*{How the book is structured}
+\addcontentsline{toc}{section}{How the book is structured}
+
+The book has four parts plus two appendices. I'll plot them out so I can find my way around:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Part I — Foundation and Building Blocks.} Chapters 1--4.
+  \begin{itemize}
+    \item Ch.~1: defines data engineering and the data engineer role.
+    \item Ch.~2: the data engineering lifecycle in detail.
+    \item Ch.~3: what makes a "good" data architecture.
+    \item Ch.~4: a framework for choosing technologies. The authors are insistent that architecture and technology are different things — a distinction many teams collapse to their detriment.
+  \end{itemize}
+  \item \textbf{Part II — The Lifecycle in Depth.} Chapters 5--9, one chapter per lifecycle stage. The authors call this the heart of the book, and I believe them.
+  \item \textbf{Part III — Security, Privacy, and the Future.} Chapters 10--11. Security and privacy used to be afterthoughts; with GDPR, CCPA, and the recent wave of data breach legislation they're now front and centre. Chapter 11 is the authors' speculation about where the field is going.
+  \item \textbf{Appendix A:} serialization and compression — surprisingly load-bearing topics for a working engineer.
+  \item \textbf{Appendix B:} cloud networking — the kind of thing that bites you when you don't know it.
+\end{itemize}
+
+\section*{The conventions and callouts}
+\addcontentsline{toc}{section}{The conventions and callouts}
+
+The book uses standard O'Reilly typographical conventions — italics for new terms, monospace for code, and three callout types I'll mirror in my own notes:
+
+\begin{tipbox}
+\textbf{\color{berkeleyblue}Tip}\\
+A practical suggestion or rule of thumb.
+\end{tipbox}
+
+\begin{notebox}
+\textbf{\color{berkeleyblue}Note}\\
+A useful aside or piece of context I want to keep handy.
+\end{notebox}
+
+\begin{warnbox}
+\textbf{\color{berkeleyblue}Warning}\\
+Something I should avoid, or a place where mistakes are common.
+\end{warnbox}
+
+I'll use these in my own notes too, with the same colour-coding so I can scan a chapter and pick out the practical takeaways at a glance.
+
+\section*{The acknowledgments — and what they tell us about the field}
+\addcontentsline{toc}{section}{The acknowledgments and what they tell us}
+
+Most readers skip acknowledgments. Don't, in this case. Reis and Housley thank a small army of practitioners — Bill Inmon, Zhamak Dehghani, Maxime Beauchemin, Martin Kleppmann, Andy Petrella, Chad Sanderson, Barr Moses, Benn Stancil, Jordan Tigani — and the names are themselves a reading list. These are people whose blog posts, books, and talks have shaped the modern field. A few I want to flag for my own follow-up reading:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Bill Inmon} — coined "data warehouse" in 1989, wrote the foundational books on data warehousing, and is still active and contrarian. His blog and books on the data warehouse versus the data lakehouse are worth the time.
+  \item \textbf{Maxime Beauchemin} — wrote \href{https://www.freecodecamp.org/news/the-rise-of-the-data-engineer-91be18f1e603/}{"The Rise of the Data Engineer"} (2017), which is essentially the manifesto that named the field, and the follow-up \href{https://maximebeauchemin.medium.com/the-downfall-of-the-data-engineer-5bfb701e5d6b}{"The Downfall of the Data Engineer"}. He also created Apache Airflow at Airbnb and Apache Superset.
+  \item \textbf{Zhamak Dehghani} — coined "data mesh" in a series of \href{https://martinfowler.com/articles/data-monolith-to-mesh.html}{posts on Martin Fowler's site} (2019), and wrote the O'Reilly book on data mesh.
+  \item \textbf{Martin Kleppmann} — wrote \emph{Designing Data-Intensive Applications}, which is the canonical reference for the systems-engineering side of the field. If \emph{Fundamentals of Data Engineering} is the map, Kleppmann's book is the topology.
+  \item \textbf{Barr Moses} — co-founded Monte Carlo and gave "data observability" its current shape.
+  \item \textbf{Jordan Tigani} — built BigQuery at Google, then went on to argue that \href{https://motherduck.com/blog/big-data-is-dead/}{"Big data is dead"} (2023), which is a fascinating counterpoint to the big-data orthodoxy of the previous decade.
+\end{itemize}
+
+The authors interviewed and shaped the book around these people. Reading the book without at least sampling the underlying voices is leaving leverage on the table.
+
+\section*{Videos and talks worth your time}
+\addcontentsline{toc}{section}{Videos and talks worth your time}
+
+Books are great, but a lot of the practitioner wisdom in this field lives in conference talks, podcasts, and YouTube. Here's a starter playlist I want to revisit while reading the book — paired with the topics they pair best with.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{The Joe Reis Show} (formerly \emph{The Monday Morning Data Chat}). The author Joe Reis runs a long-form interview show with practitioners across the field. \href{https://www.youtube.com/@JoeReisData}{youtube.com/@JoeReisData} and on every podcast platform. If you only listen to one episode, the \emph{Bill Inmon} conversation is a master class on the historical roots of the field.
+  \item \textbf{Andy Pavlo's CMU Database Group lectures.} The CMU \emph{Intro to Database Systems} (15-445) and \emph{Advanced Database Systems} (15-721) lectures are on \href{https://www.youtube.com/@CMUDatabaseGroup}{YouTube} for free. Pavlo's tour of the database world is the best free upskill in the systems side of data work, period. The 15-721 series in particular goes through OLAP, vectorisation, query optimisation, and the modern lakehouse stack.
+  \item \textbf{Maxime Beauchemin --- ``The Rise of the Data Engineer''} talks. Several conference recordings exist; the Coalesce 2020 keynote is one of the better ones. Pairs with the article of the same name.
+  \item \textbf{Zhamak Dehghani on Data Mesh.} Her \href{https://www.youtube.com/watch?v=TVxdW2gG3X8}{InfoQ talk on data mesh} is the cleanest one-hour summary of the architectural pattern she introduced.
+  \item \textbf{Martin Kleppmann's talks.} \emph{Designing Data-Intensive Applications} the talk version: \href{https://www.youtube.com/watch?v=v2RJ1XMkPvs}{``Turning the database inside out''} (Strange Loop 2014) is the seven-year-old talk that still defines how to think about streams and materialised views.
+  \item \textbf{Andrew Ng on Data-Centric AI.} A short but important shift in mindset: better data beats better models. \href{https://www.youtube.com/watch?v=06-AZXmwHjo}{``A Chat with Andrew Ng on MLOps''} is the most circulated version.
+  \item \textbf{DataEng Conf, Coalesce, Subsurface, Data Council.} Four conferences worth tracking. Talks from each show up on YouTube within a few weeks of the event.
+\end{itemize}
+
+\section*{Heading into Chapter 1}
+\addcontentsline{toc}{section}{Heading into Chapter 1}
+
+The preface ends and Chapter 1 begins. Chapter 1's job is to define data engineering — the term, the role, the relationship with adjacent roles, and the historical arc that produced the field as it exists today. I'll pick that up next.
+
+\clearpage

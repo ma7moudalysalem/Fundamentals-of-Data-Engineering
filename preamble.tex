@@ -1,0 +1,231 @@
+%!TEX program = xelatex
+%% ================================================================
+%%  PREAMBLE — shared formatting for the lecture-notes book
+%% ================================================================
+
+\usepackage{geometry}
+\geometry{
+  top    = 2.8cm,
+  bottom = 2.5cm,
+  left   = 3.0cm,
+  right  = 2.5cm,
+  headheight = 25pt,
+  headsep    = 0.8cm,
+  footskip   = 1.0cm
+}
+
+%% Typography
+\usepackage{microtype}
+\emergencystretch = 2em
+\tolerance        = 800
+\widowpenalty     = 10000
+\clubpenalty      = 10000
+
+%% Colours — Berkeley blue + California gold accent
+\usepackage{xcolor}
+\definecolor{berkeleyblue}{HTML}{003262}
+\definecolor{californiagold}{HTML}{FDB515}
+\definecolor{darkgold}{HTML}{C8930A}
+\definecolor{lightbg}{HTML}{F7F9FC}
+\definecolor{rulegray}{HTML}{BBBBBB}
+\definecolor{noteblue}{HTML}{EBF4FF}
+\definecolor{noteborder}{HTML}{4A90D9}
+\definecolor{warningbg}{HTML}{FFF8E1}
+\definecolor{warningborder}{HTML}{E6A817}
+\definecolor{tipbg}{HTML}{F0FFF4}
+\definecolor{tipborder}{HTML}{38A169}
+\definecolor{codebg}{HTML}{F8F8F8}
+\definecolor{codeframe}{HTML}{D0D0D0}
+\definecolor{quotebg}{HTML}{FAF7F0}
+\definecolor{quoteborder}{HTML}{B59410}
+\definecolor{deflbg}{HTML}{F5F0FF}
+\definecolor{deflborder}{HTML}{6B46C1}
+
+%% Packages
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+\usetikzlibrary{shapes,arrows.meta,positioning,fit,backgrounds,calc}
+
+%% Fonts (XeLaTeX)
+\usepackage{fontspec}
+\setmainfont{LinLibertine_R.otf}[
+  Path           = fonts/,
+  BoldFont       = LinLibertine_RB.otf,
+  ItalicFont     = LinLibertine_RI.otf,
+  BoldItalicFont = LinLibertine_RBI.otf
+]
+\setsansfont{LinBiolinum_R.otf}[
+  Path           = fonts/,
+  BoldFont       = LinBiolinum_RB.otf,
+  ItalicFont     = LinBiolinum_RI.otf
+]
+
+\graphicspath{{images/}}
+
+%% Hyperref
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = berkeleyblue,
+  urlcolor   = darkgold,
+  citecolor  = berkeleyblue,
+  pdftitle   = {Fundamentals of Data Engineering — Lecture Notes},
+  pdfauthor  = {Mahmoud Salem},
+  pdfsubject = {Personal study notes on Reis & Housley (O'Reilly, 2022)}
+}
+
+%% Caption styling
+\captionsetup{
+  font      = {small},
+  labelfont = {bf, color=berkeleyblue},
+  textfont  = {it},
+  format    = hang,
+  margin    = 0.8cm
+}
+
+%% Section formatting
+\titleformat{\chapter}[display]
+  {\normalfont\Huge\bfseries\color{berkeleyblue}}
+  {\filright\Large\textsc{Chapter}~\thechapter}
+  {0.6em}
+  {\filright}
+  [\vspace{4pt}{\color{californiagold}\titlerule[2pt]}]
+
+\titleformat{\section}
+  {\Large\bfseries\color{berkeleyblue}}
+  {\thesection}{0.8em}{}
+  [\vspace{2pt}{\color{californiagold}\titlerule[1.5pt]}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{berkeleyblue}}
+  {\thesubsection}{0.8em}{}
+  [\vspace{1pt}{\color{californiagold}\titlerule[0.8pt]}]
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{berkeleyblue}}
+  {\thesubsubsection}{0.8em}{}
+
+\titlespacing*{\section}      {0pt}{2.0ex plus 0.6ex minus 0.2ex}{1.0ex plus 0.3ex}
+\titlespacing*{\subsection}   {0pt}{1.5ex plus 0.5ex minus 0.1ex}{0.8ex plus 0.2ex}
+\titlespacing*{\subsubsection}{0pt}{1.2ex plus 0.4ex}{0.5ex plus 0.1ex}
+
+%% Header / footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{berkeleyblue}\nouppercase{\leftmark}}
+\fancyhead[R]{\small\color{californiagold}\thepage}
+\fancyfoot[C]{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{californiagold}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\small\color{berkeleyblue}\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markboth{\thesubsection\ #1}{}}
+
+%% Box environments
+\newmdenv[
+  backgroundcolor = noteblue,
+  linewidth       = 2.5pt,
+  linecolor       = noteborder,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innertopmargin  = 10pt, innerbottommargin = 10pt,
+  innerleftmargin = 14pt, innerrightmargin  = 10pt,
+  skipabove = 10pt, skipbelow = 10pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor = tipbg,
+  linewidth       = 2.5pt,
+  linecolor       = tipborder,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innertopmargin  = 10pt, innerbottommargin = 10pt,
+  innerleftmargin = 14pt, innerrightmargin  = 10pt,
+  skipabove = 10pt, skipbelow = 10pt
+]{tipbox}
+
+\newmdenv[
+  backgroundcolor = warningbg,
+  linewidth       = 2.5pt,
+  linecolor       = warningborder,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innertopmargin  = 10pt, innerbottommargin = 10pt,
+  innerleftmargin = 14pt, innerrightmargin  = 10pt,
+  skipabove = 10pt, skipbelow = 10pt
+]{warnbox}
+
+\newmdenv[
+  backgroundcolor = quotebg,
+  linewidth       = 2.5pt,
+  linecolor       = quoteborder,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innertopmargin  = 10pt, innerbottommargin = 10pt,
+  innerleftmargin = 16pt, innerrightmargin  = 12pt,
+  skipabove = 12pt, skipbelow = 12pt
+]{quotebox}
+
+\newmdenv[
+  backgroundcolor = deflbg,
+  linewidth       = 2.5pt,
+  linecolor       = deflborder,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innertopmargin  = 10pt, innerbottommargin = 10pt,
+  innerleftmargin = 14pt, innerrightmargin  = 10pt,
+  skipabove = 10pt, skipbelow = 10pt
+]{defbox}
+
+%% Code listings
+\lstset{
+  basicstyle       = \small\ttfamily,
+  backgroundcolor  = \color{codebg},
+  frame            = single,
+  rulecolor        = \color{codeframe},
+  breaklines       = true,
+  breakatwhitespace= true,
+  tabsize          = 4,
+  showstringspaces = false,
+  numbers          = left,
+  numberstyle      = \tiny\color{rulegray},
+  numbersep        = 8pt,
+  xleftmargin      = 16pt,
+  xrightmargin     = 8pt,
+  aboveskip        = 10pt,
+  belowskip        = 10pt,
+  framexleftmargin = 6pt,
+  captionpos       = b
+}
+
+%% Convenience macros
+\newcommand{\term}[1]{\textit{\textbf{#1}}}
+\newcommand{\emphterm}[1]{\textbf{\color{berkeleyblue}#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+%% Pull-quote (epigraph) styling
+\setlength{\epigraphwidth}{0.78\textwidth}
+\renewcommand{\epigraphflush}{flushright}
+\renewcommand{\epigraphsize}{\small\itshape}
+\renewcommand{\textflush}{flushepinormal}
+\renewcommand{\sourceflush}{flushright}
