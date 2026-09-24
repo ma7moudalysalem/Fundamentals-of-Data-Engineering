@@ -48,7 +48,7 @@ The book is available at:
 
 ## About me
 
-**Mahmoud Salem** — [linkedin.com/in/mahmoudalysalem](https://www.linkedin.com/in/mahmoudalysalem)
+**Mahmoud Salem** — [linkedin.com/in/ma7moudalysalem](https://www.linkedin.com/in/ma7moudalysalem)
 
 I'm working through this book to firm up my own mental model of data engineering. If you spot a mistake or want to discuss something in the notes, feel free to open an issue or reach out on LinkedIn.
 
